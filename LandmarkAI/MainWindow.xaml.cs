@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LandmarkAI.Classes;
+using Newtonsoft.Json;
 
 namespace LandmarkAI
 {
@@ -64,6 +66,7 @@ namespace LandmarkAI
                     content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentKey);
                     var response = await client.PostAsync(urlKey, content);
                     var responseString = await response.Content.ReadAsStringAsync();
+                    List<Prediction> predictions = (List<Prediction>)JsonConvert.DeserializeObject<CustomVision>(responseString).Predictions;
                 }
             }
         }

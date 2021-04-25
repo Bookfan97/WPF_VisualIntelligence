@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LandmarkAI.Classes
 {
-    public class Predicition
+    public class Prediction
     {
         public string TagID { get; set; }
         public string Tag { get; set; }
@@ -17,6 +17,6 @@ namespace LandmarkAI.Classes
         public string Project { get; set; }
         public string Iteration { get; set; }
         public DateTime Created { get; set; }
-        public IList<Predicition> Predictions { get; set; }
+        public IList<Prediction> Predictions { get; set; }
     }
 }
