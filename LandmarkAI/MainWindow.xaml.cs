@@ -25,7 +25,7 @@ namespace LandmarkAI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string urlKey, predictionKey, contentKey;
+        private string _urlKey, _predictionKey, _contentKey;
 
         public MainWindow()
         {
@@ -37,9 +37,9 @@ namespace LandmarkAI
         {
             //Change file directory to mattch keys
             string[] lines = File.ReadAllLines(@"F:\Github\WPF_VisualIntelligence\LandmarkAI\keys.txt");
-            urlKey = lines[0];
-            predictionKey = lines[1];
-            contentKey = lines[2];
+            _urlKey = lines[0];
+            _predictionKey = lines[1];
+            _contentKey = lines[2];
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -50,7 +50,7 @@ namespace LandmarkAI
             if (dialog.ShowDialog() == true)
             {
                 string fileName = dialog.FileName;
-                selectedImage.Source = new BitmapImage(new Uri(fileName));
+                SelectedImage.Source = new BitmapImage(new Uri(fileName));
                 MakePredictionAsync(fileName);
             }
         }
@@ -60,13 +60,14 @@ namespace LandmarkAI
             var file = File.ReadAllBytes(fileName);
             using (HttpClient client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("Prediction-Key", predictionKey);
+                client.DefaultRequestHeaders.Add("Prediction-Key", _predictionKey);
                 using (var content = new ByteArrayContent(file))
                 {
-                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentKey);
-                    var response = await client.PostAsync(urlKey, content);
+                    content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(_contentKey);
+                    var response = await client.PostAsync(_urlKey, content);
                     var responseString = await response.Content.ReadAsStringAsync();
                     List<Prediction> predictions = (List<Prediction>)JsonConvert.DeserializeObject<CustomVision>(responseString).Predictions;
+                    PredictionListView.ItemsSource = predictions;
                 }
             }
         }
